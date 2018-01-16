@@ -2,7 +2,6 @@ import url_manager, html_downloader, html_parser
 import pickle
 import os
 import sys
-from multiprocessing.dummy import Pool as ThreadPool
 import threading
 
 

@@ -17,10 +17,10 @@ class HtmlParser(object):
         return new_urls
 
     def _save_new_data(self, page_url, soup,html_cont):
-
         res_data = False
         if '?force=1' in page_url:
-            #invailed content page
+            #multiple items
+            print('multiple items')
             return not res_data
         #error items
         title_node =''
@@ -34,13 +34,11 @@ class HtmlParser(object):
             title_sub__text = soup.find('dd', class_='lemmaWgt-lemmaTitle-title').find('h2').get_text()
         except:
             title_sub__text=''
-        try:
-            filename = title_node.get_text() + title_sub__text
-            with open('webpages/' + filename, 'w') as f:
-                f.write(html_cont.decode('utf-8'))
-                print('Save to disk filename:'+f.name+"")
-        except:
-            print('multiple xiang')
+
+        filename = title_node.get_text() + title_sub__text
+        with open('/data/webpages/' + filename, 'w') as f:
+            f.write(html_cont.decode('utf-8'))
+            print('Save to disk filename:'+f.name+"")
         return res_data
 
     def parse(self, page_url, html_cont):
