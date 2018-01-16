@@ -2,7 +2,7 @@
 from bs4 import BeautifulSoup
 import re
 from urllib.parse import urljoin
-
+import os
 class HtmlParser(object):
     def _get_new_urls(self, page_url, soup):
         new_urls = set()
@@ -36,7 +36,9 @@ class HtmlParser(object):
             title_sub__text=''
 
         filename = title_node.get_text() + title_sub__text
-        with open('/data/webpages/' + filename, 'w') as f:
+        if not os.path.exists('webpages/'):
+            os.mkdir('webpages/')
+        with open('webpages/' + filename, 'w') as f:
             f.write(html_cont.decode('utf-8'))
             print('Save to disk filename:'+f.name+"")
         return res_data
