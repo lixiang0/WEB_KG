@@ -38,7 +38,7 @@ class HtmlParser(object):
         filename = title_node.get_text() + title_sub__text
         if not os.path.exists('webpages/'):
             os.mkdir('webpages/')
-        with open('webpages/' + filename, 'w') as f:
+        with open('webpages/' + filename.replace('/',''), 'w') as f:
             f.write(html_cont.decode('utf-8'))
             print('Save to disk filename:'+f.name+"")
         return res_data

@@ -21,7 +21,7 @@ class MyThread(threading.Thread):
                 lock.acquire()
                 new_url = urls.get_new_url()
                 lock.release()
-                print('craw %d : %s' % (len(urls.old_urls), new_url))
+                print('craw %d' % (len(urls.old_urls)))
                 html_cont = downloader.download(new_url)
                 new_urls, _ = parser.parse(new_url, html_cont)
                 lock.acquire()
