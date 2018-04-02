@@ -38,28 +38,21 @@ if __name__=='__main__':
     urls = url_manager.UrlManager()
     downloader = html_downloader.HtmlDownloader()
     parser = html_parser.HtmlParser()
-    th1 = MyThread()
-    th2 = MyThread()
-    th3 = MyThread()
-    th4 = MyThread()
+    list_thread=[]
+    count_thread=12
+    for i in range(count_thread):
+        list_thread.append(MyThread())
     try:
         if os.path.exists('urls.bin'):
             urls=pickle.load(open('urls.bin','rb'))
         else:
             urls.add_new_url(root_url)
-        th1.start()
-        th2.start()
-        th3.start()
-        th4.start()
-        th1.join()
-        th2.join()
-        th3.join()
-        th4.join()
+        for th in list_thread:
+            th.start()
+            th.join()
     except:
-        th1.terminate()
-        th2.terminate()
-        th3.terminate()
-        th4.terminate()
+        for th in list_thread:
+            th.terminate()
         print('error!', sys.exc_info()[0])
     finally:
         print('save state')
