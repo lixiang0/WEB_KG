@@ -4,7 +4,7 @@
 - 抽取三元组
 - 构建中文知识图谱
 
-![https://github.com/lixiang0/baike-spider/blob/master/kg/kg.png]()
+![](./kg/kg.png)
 
 ### 环境
 
