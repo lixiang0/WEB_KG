@@ -18,17 +18,32 @@ class entity:
 			self.attr[attr]=name
 attrs=[]
 entities=[]
+kgtxt=open('./triples.txt','a+')
+result=''
 for page in pages:
 	name=page.split('/')[-1][:-4]
-	lines=open(page).readlines(0)
+	lines=open(page).readlines()
+	if len(lines)<1:
+		continue
 	ent=entity()
 	ent.name=name
-	for line in lines:
+	for i,line in enumerate(lines):
 		arrs=line.split('$$')
-		attrs.append(arrs[0])
-		ent.add_attr(arrs[0],arrs[1])
+		if len(arrs)!=2:
+			continue
+		attr=arrs[0].replace(' ','')
+		value=arrs[1].replace('\n','')
+		attrs.append(attr)
+		ent.add_attr(attr,value)
+		# print("name:{}  attr:{}  value:{}".format(name,attr,value))
+		try:
+			kgtxt.write(name+"$$"+attr+"$$"+value+"\n")
+		except Exception:
+			print(name+"$$"+attr+"$$"+value+"error")
 	entities.append(ent)
-	break
+
+kgtxt.close()
 print(len(attrs),len(entities))
-pkl.dump(attrs,open('./attrs.bin','wb'))
+pkl.dump(attrs,open('./attrs.bin','w'))
 pkl.dump(entities,open('./entities.bin','wb'))
+print('done')
