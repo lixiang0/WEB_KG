@@ -12,7 +12,7 @@
 - bs4:网页解析
 - pickle:进度保存
 - threading:多线程
-- neo4j:知识图谱图数据库
+- neo4j:知识图谱图数据库,安装可以参考[链接](http://blog.rubenxiao.com/posts/install-neo4j.html)
 - pip install neo4j-driver：neo4j python驱动
 
 ### 运行前指定几个路径：
