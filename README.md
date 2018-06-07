@@ -1,7 +1,7 @@
 # 开源web知识图谱项目
 
 - 爬取百度百科中文页面
-- 抽取三元组[100W+个三元组](https://github.com/lixiang0/WEB_KG/blob/master/kg/triples.txt)
+- 抽取[100W+个三元组](https://raw.githubusercontent.com/lixiang0/WEB_KG/master/kg/triples.txt)
 - 构建中文知识图谱
 
 ### 环境
