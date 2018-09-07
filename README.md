@@ -1,7 +1,8 @@
 #### Tips
 
-如果是项目问题，请提issue。
-如果涉及到不方便公开的，请发邮件。
+
+- 如果是项目问题，请提issue。
+- 如果涉及到不方便公开的，请发邮件。
 
 
 # 开源web知识图谱项目
@@ -21,20 +22,6 @@
 - neo4j:知识图谱图数据库,安装可以参考[链接](http://blog.rubenxiao.com/posts/install-neo4j.html)
 - pip install neo4j-driver：neo4j python驱动
 
-### 运行前指定几个路径：
-
-spider/html_paser.py第38行为网页存储路径：
-```
-        path='/data/ruben/data/webpages/'#custom diectory for webpages
-```
-ie/extract-para.py第11行为网页存储路径：
-```
-        pages=glob.glob('/data/ruben/data/webpages/*')
-```
-ie/extract-table.py第37行为网页存储路径：
-```
-        pages=glob.glob('/data/ruben/data/webpages/*')
-```
 
 ### 代码目錄
 
@@ -49,9 +36,11 @@ ie/extract-table.py第37行为网页存储路径：
 python spider/spider_main.py
 python ie/extract-para.py
 python ie/extract-table.py
-python kg/test_neo4j.py
+python kg/build-triple-from-table.py
+python kg/insert_to_neo4j.py
 ```
 
+### 知识图谱效果图
 
 ![](./kg/kg.png)
 

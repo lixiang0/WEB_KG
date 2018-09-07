@@ -8,7 +8,7 @@ import os,sys
 import threading
 
 print('loading pages')
-pages=glob.glob('/data/ruben/data/webpages/*')
+pages=glob.glob('../webpages/*')
 print('loading pages done.')
 savepath='./paged.bin'
 
@@ -33,7 +33,7 @@ class MyThread(threading.Thread):
 		para=re.sub('\[[0-9]+\]', '', ''.join(word for word in line.xpath('//div[contains(@class, "para")]//text()').extract() if len(word)>1))
 		# print(para)
 		print('process file:'+str(title))
-		output = open('../info-para/'+''.join(title).replace('/','')+'.txt','w')
+		output = open('./info-para/'+''.join(title).replace('/','')+'.txt','w')
 		output.write(para)
 		output.close()
 	def run(self):

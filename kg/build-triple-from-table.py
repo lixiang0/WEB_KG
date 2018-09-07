@@ -2,7 +2,7 @@ import glob
 import os
 import re
 import pickle as pkl
-pages=glob.glob('../info-table/*')
+pages=glob.glob('../ie/info-table/*')
 
 # pattern=re.compile(r'[\u4e00-\u9fa5]+')
 print(len(pages),pages[0])
@@ -35,7 +35,7 @@ for page in pages:
 		value=arrs[1].replace('\n','')
 		attrs.append(attr)
 		ent.add_attr(attr,value)
-		# print("name:{}  attr:{}  value:{}".format(name,attr,value))
+		print("name:{}  attr:{}  value:{}".format(name,attr,value))
 		try:
 			kgtxt.write(name+"$$"+attr+"$$"+value+"\n")
 		except Exception:
@@ -44,6 +44,6 @@ for page in pages:
 
 kgtxt.close()
 print(len(attrs),len(entities))
-pkl.dump(attrs,open('./attrs.bin','w'))
+pkl.dump(attrs,open('./attrs.bin','wb'))
 pkl.dump(entities,open('./entities.bin','wb'))
 print('done')

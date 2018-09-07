@@ -35,7 +35,7 @@ class HtmlParser(object):
         except:
             title_sub__text=''
         filename = title_node.get_text() + title_sub__text
-        path='/data/ruben/data/webpages/'#custom diectory for webpages
+        path='../webpages/'#custom diectory for webpages
         if not os.path.exists(path):
             os.mkdir(path)
         with open(path + filename.replace('/',''), 'w') as f:

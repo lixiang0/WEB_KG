@@ -34,7 +34,7 @@ import os
 # </dd>
 # </dl></div>
 
-pages=glob.glob('/data/ruben/data/webpages/*')
+pages=glob.glob('../webpages/*')
 savepath='./paged-table.bin'
 print(len(pages))
 print(pages[0])
