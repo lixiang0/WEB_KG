@@ -36,12 +36,11 @@
 
 ### 代码执行顺序：
 
-```
-python spider/spider_main.py
-python ie/extract-para.py
-python ie/extract-table.py
-python kg/build-triple-from-table.py
-python kg/insert_to_neo4j.py
+- spider目录下执行：python spider_main.py
+- ie目录下执行：python extract-para.py
+- ie目录下执行：python extract-table.py
+- kg目录下执行：python build-triple-from-table.py
+- kg目录下执行：python insert_to_neo4j.py
 ```
 
 ### 知识图谱效果图
