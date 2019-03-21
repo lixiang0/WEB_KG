@@ -3,7 +3,7 @@
 
 - 如果是项目问题，请提issue。
 - 如果涉及到不方便公开的，请发邮件。
-- ChatBot请访问[链接](http://bot.rubenxiao.com)
+- ChatBot请访问[链接](http://121.42.138.77:8889/)
 
 ### update 0907
 
