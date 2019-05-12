@@ -38,16 +38,15 @@ class MyThread(threading.Thread):
 		output.close()
 	def run(self):
 		try:
-			while(True):
-				if len(pages)>0:
-					lock.acquire()
-					page=pages[0]
-					pages.remove(page)
-					lock.release()
-					self.extract(page)
-					lock.acquire()
-					paged.append(page)
-					lock.release()
+			while len(pages)>0 and self.running:
+				lock.acquire()
+				page=pages[0]
+				pages.remove(page)
+				lock.release()
+				self.extract(page)
+				lock.acquire()
+				paged.append(page)
+				lock.release()
 		except Exception as e:
 			print('fail to extract..',str(e))
 			fail_file.write(page)
