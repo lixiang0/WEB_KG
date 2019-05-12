@@ -5,11 +5,6 @@
 - 如果涉及到不方便公开的，请发邮件。
 - ChatBot请访问[链接](http://bot.rubenxiao.com)
 
-### update 0907
-
-- 1.修改网页保存路径为相对路径
-- 2.删除多余的文件，只保留代码文件
-
 # 开源web知识图谱项目
 
 - 爬取百度百科中文页面
@@ -44,6 +39,7 @@
 - 4.kg目录下执行：python build-triple-from-table.py
 - 5.kg目录下执行：python insert_to_neo4j.py
 
+第二步本项目可以不执行。
 
 ### 知识图谱效果图
 

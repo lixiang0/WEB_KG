@@ -5,9 +5,6 @@ import sys
 import threading
 
 
-
-
-
 class MyThread(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
@@ -17,43 +14,46 @@ class MyThread(threading.Thread):
     def run(self):
         try:
             while urls.has_new_url() and self._running:
-                global i
-                lock.acquire()
+                LOCK.acquire()
                 new_url = urls.get_new_url()
-                lock.release()
+                LOCK.release()
                 print('craw %d' % (len(urls.old_urls)))
                 html_cont = downloader.download(new_url)
                 new_urls, _ = parser.parse(new_url, html_cont)
-                lock.acquire()
+                LOCK.acquire()
                 urls.add_new_urls(new_urls)
-                lock.release()
+                LOCK.release()
         except:
             print('save state')
             pickle.dump(urls, open('urls.bin', 'wb'))
 
 
 if __name__=='__main__':
+    PATH='urls.pkl'
     root_url = 'http://baike.baidu.com'
-    lock=threading.Lock()
+    LOCK=threading.Lock()
     urls = url_manager.UrlManager()
     downloader = html_downloader.HtmlDownloader()
     parser = html_parser.HtmlParser()
-    list_thread=[]
-    count_thread=12
+    threads=[]
+    count_thread=1
+    if os.path.exists(PATH):
+        urls=pickle.load(open(PATH,'rb'))
+    else:
+        urls.add_new_url(root_url)
+    length=len(urls.new_urls)
+    print(f'build urls,length={length}')
     for i in range(count_thread):
-        list_thread.append(MyThread())
+        print(f'build thread {i}...')
+        threads.append(MyThread())
     try:
-        if os.path.exists('urls.bin'):
-            urls=pickle.load(open('urls.bin','rb'))
-        else:
-            urls.add_new_url(root_url)
-        for th in list_thread:
-            th.start()
-            th.join()
+        for t in threads:
+            t.start()
+            t.join()
     except:
-        for th in list_thread:
-            th.terminate()
+        for t in threads:
+            t.terminate()
         print('error!', sys.exc_info()[0])
     finally:
-        print('save state')
-        pickle.dump(urls, open('urls.bin', 'wb'))
+        print('finished,saving state')
+        pickle.dump(urls, open(PATH, 'wb'))

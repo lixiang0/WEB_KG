@@ -35,10 +35,10 @@ class HtmlParser(object):
         except:
             title_sub__text=''
         filename = title_node.get_text() + title_sub__text
-        path='../webpages/'#custom diectory for webpages
+        path=os.path.join('.','webpages')#custom diectory for webpages
         if not os.path.exists(path):
             os.mkdir(path)
-        with open(path + filename.replace('/',''), 'w') as f:
+        with open(os.path.join(path ,filename.replace('/','')), 'w') as f:
             f.write(html_cont.decode('utf-8'))
             print('Save to disk filename:'+f.name+"")
         return res_data
