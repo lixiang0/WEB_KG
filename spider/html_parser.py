@@ -3,51 +3,48 @@ from bs4 import BeautifulSoup
 import re
 from urllib.parse import urljoin
 import os
-class HtmlParser(object):
-    def _get_new_urls(self, page_url, soup):
-        new_urls = set()
-        # /view/123.htm
-        links = soup.find_all('a', href=re.compile(r'/item/%[A-Z0-9]+'))
-        for link in links:
-            new_url = link['href']
-            new_full_url = urljoin(page_url, new_url)
-            # print(new_full_url)
-            new_urls.add(new_full_url)
-        # print(new_urls)
-        return new_urls
+import urllib
 
-    def _save_new_data(self, page_url, soup,html_cont):
-        res_data = False
-        if '?force=1' in page_url:
-            #multiple items
-            print('multiple items')
-            return not res_data
-        #error items
-        title_node =''
-        try:
-            title_node=soup.find('dd', class_='lemmaWgt-lemmaTitle-title').find('h1')
-        except:
-            return not res_data
-        #second title
-        title_sub__text=''
-        try:
-            title_sub__text = soup.find('dd', class_='lemmaWgt-lemmaTitle-title').find('h2').get_text()
-        except:
-            title_sub__text=''
-        filename = title_node.get_text() + title_sub__text
+class HtmlParser(object):
+    def _get_new_urls(self, soup):
+        maps = dict()
+        # /view/123.htm
+        #<a target="_blank" href="/item/%E6%9D%8E%C2%B7%E5%A1%94%E7%8E%9B%E9%9C%8D%E7%91%9E/5486870" data-lemmaid="5486870">李·塔玛霍瑞</a>
+        links = soup.find_all('a',href=re.compile('/item/[\u4E00-\u9FA5]+'))
+        for link in links:
+            temp=BeautifulSoup(str(link), 'lxml')
+            maps[temp.find('a').contents[0]]=urljoin('https://baike.baidu.com', temp.find('a')['href']) 
+        return maps
+
+    def _save_new_data(self, soup,html_cont):
+        is_saved = False
+        # <input id="query" nslog="normal" nslog-type="10080015" name="word" type="text" autocomplete="off" autocorrect="off" value="谁与争锋">
+        title=soup.find('title').contents[0]#,{'name':'word'})['value']
         path=os.path.join('.','webpages')#custom diectory for webpages
         if not os.path.exists(path):
             os.mkdir(path)
-        with open(os.path.join(path ,filename.replace('/','')), 'w') as f:
+        with open(os.path.join(path ,title), 'w') as f:
             f.write(html_cont.decode('utf-8'))
             print('Save to disk filename:'+f.name+"")
-        return res_data
+        return is_saved
 
-    def parse(self, page_url, html_cont):
-        if page_url is None or html_cont is None:
+    def parse(self, html_cont):
+        if html_cont is None:
             return
-        soup = BeautifulSoup(html_cont, 'html.parser')
+        soup = BeautifulSoup(html_cont, 'lxml')
         # print(soup.prettify())
-        new_urls = self._get_new_urls(page_url, soup)
-        is_saved = self._save_new_data(page_url, soup,html_cont)
-        return new_urls, is_saved
+        maps = self._get_new_urls( soup)
+        is_saved = self._save_new_data( soup,html_cont)
+        return list(maps.values()), is_saved
+
+
+if __name__ == "__main__":
+    import html_downloader
+    dd=html_downloader.HtmlDownloader()
+    content=dd.download('https://baike.baidu.com')
+    parser = HtmlParser()
+    import time
+    start=time.time()
+    new_urls, _ = parser.parse(content)
+    cost=time.time()-start
+    # print('\n'.join(new_urls),str(cost))
