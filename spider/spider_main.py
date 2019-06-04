@@ -17,14 +17,14 @@ class MyThread(threading.Thread):
                 LOCK.acquire()
                 new_url = urls.get_new_url()
                 LOCK.release()
-                print('craw %d' % (len(urls.old_urls)))
+                print('craw %d' % (len(urls.old_urls)),new_url)
                 html_cont = downloader.download(new_url)
-                new_urls, _ = parser.parse(new_url, html_cont)
+                new_urls, _ = parser.parse(html_cont)
                 LOCK.acquire()
                 urls.add_new_urls(new_urls)
                 LOCK.release()
         except:
-            print('save state')
+            print('save state',sys.exc_info())
             pickle.dump(urls, open('urls.bin', 'wb'))
 
 
@@ -36,7 +36,7 @@ if __name__=='__main__':
     downloader = html_downloader.HtmlDownloader()
     parser = html_parser.HtmlParser()
     threads=[]
-    count_thread=1
+    count_thread=36
     if os.path.exists(PATH):
         urls=pickle.load(open(PATH,'rb'))
     else:
