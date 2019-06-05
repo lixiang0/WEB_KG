@@ -15,6 +15,8 @@ class MyThread(threading.Thread):
         self._running = False
     def run(self):
         try:
+            pages=0
+            spendtime=0.
             while urls.has_new_url() and self._running:
                 start=time.time()
                 LOCK.acquire()
@@ -24,9 +26,11 @@ class MyThread(threading.Thread):
                 new_urls, _ = parser.parse(html_cont)
                 LOCK.acquire()
                 urls.add_new_urls(new_urls)
-                spend=time.time()-start
                 LOCK.release()
-                print(f"Thread:{self.name} craw id:{len(urls.old_urls)} URL:{urllib.parse.unquote(new_url).split('/')[-1]} spend:{str(spend)}")
+                pages+=1
+                spendtime+=time.time()-start
+                cost=spendtime/pages
+                print(f"Thread:{self.name} id:{len(urls.old_urls)} URL:{urllib.parse.unquote(new_url).split('/')[-1]} {str(cost)[:4]}:sec/page")
         except:
             print('save state',sys.exc_info())
             pickle.dump(urls, open('urls.bin', 'wb'))
