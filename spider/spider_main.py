@@ -14,10 +14,11 @@ class MyThread(threading.Thread):
     def terminate(self):
         self._running = False
     def run(self):
-        try:
-            pages=0
-            spendtime=0.
-            while urls.has_new_url() and self._running:
+       # try:
+        pages=0
+        spendtime=0.
+        while urls.has_new_url() and self._running:
+            try:
                 start=time.time()
                 LOCK.acquire()
                 new_url = urls.get_new_url()
@@ -31,9 +32,11 @@ class MyThread(threading.Thread):
                 spendtime+=time.time()-start
                 cost=spendtime/pages
                 print(f"Thread:{self.name} id:{len(urls.old_urls)} URL:{urllib.parse.unquote(new_url).split('/')[-1]} {str(cost)[:4]}:sec/page")
-        except:
-            print('save state',sys.exc_info())
-            pickle.dump(urls, open('urls.bin', 'wb'))
+            except KeyboardInterrupt:
+                print('save state',sys.exc_info())
+                pickle.dump(urls, open('urls.bin', 'wb'))
+            except:
+                continue
 
 
 if __name__=='__main__':
