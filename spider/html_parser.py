@@ -16,7 +16,7 @@ class HtmlParser(object):
             # print(result)
             result=re.findall('/[！@#￥$%^&*()_+-=·A-Za-z\'.：～:\u4E00-\u9FA50-9]+[/?#]?', result)
             # print(result)
-            item=result[0].replace('/[0-9]+','').split('/')[2].replace('#hotspotmining','')
+            item=result[0]#.replace('/[0-9]+','').split('/')[2].replace('#hotspotmining','')
             # print(item)
             sets.add(urljoin('https://baike.baidu.com/item/',item))
             # print(urllib.parse.unquote(urljoin('https://baike.baidu.com', '/'.join(temp.find('a')['href'].split('/')[:5]))) )
