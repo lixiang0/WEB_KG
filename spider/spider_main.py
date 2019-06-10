@@ -31,7 +31,7 @@ class MyThread(threading.Thread):
                 pages+=1
                 spendtime+=time.time()-start
                 cost=spendtime/pages
-                print(f"Thread:{self.name} id:{len(urls.old_urls)} URL:{urllib.parse.unquote(new_url).split('/')[-1]} {str(cost)[:4]}:sec/page")
+                print(f"Thread:{self.name} id:{len(urls.old_urls)} URL:{urllib.parse.unquote(new_url).replace('https://baike.baidu.com/item/','')} {str(cost)[:4]}:sec/page")
             except KeyboardInterrupt:
                 print('save state',sys.exc_info())
                 pickle.dump(urls, open('urls.bin', 'wb'))
@@ -42,7 +42,7 @@ class MyThread(threading.Thread):
 if __name__=='__main__':
 
     PATH='urls.pkl'
-    root_url = 'https://baike.baidu.com/item/%E6%96%87%E6%B1%87%E6%8A%A5'
+    root_url = 'https://baike.baidu.com'
     LOCK=threading.Lock()
     urls = url_manager.UrlManager()
     downloader = html_downloader.HtmlDownloader()
