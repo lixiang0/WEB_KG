@@ -8,8 +8,13 @@ import re
 import pymongo
 from scrapy.selector import Selector
 from neo4j.v1 import GraphDatabase
-
-
+import logging
+import time
+logfile_name = time.ctime(time.time()).replace(' ', '_')
+if not os.path.exists('logs/'):
+    os.mkdir('logs/')
+logging.basicConfig(filename=f'logs/{logfile_name}.log', filemode='a+',
+                    format='%(levelname)s - %(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 class BaikeSpider(scrapy.Spider):
     name = 'baike'
     allowed_domains = ['baike.baidu.com']
@@ -59,29 +64,35 @@ class BaikeSpider(scrapy.Spider):
 
         # 处理三元组
         entity = ''.join(response.xpath(
-            '//h1/text()').extract()).replace('/', '')
+            '//h1/text()').getall()).replace('/', '')
         attrs = response.xpath(
-            '//dt[contains(@class,"basicInfo-item name")]').extract()
+            '//dt[contains(@class,"basicInfo-item name")]').getall()
         values = response.xpath(
-            '//dd[contains(@class,"basicInfo-item value")]').extract()
+            '//dd[contains(@class,"basicInfo-item value")]').getall()
+        if len(attrs)!= len(values):
+            return
         with self.driver.session() as session:
-            for i, attr in enumerate(attrs):
+            try:
+                for attr,value in zip(attrs,values):
                     # attr
-                temp = Selector(text=attr).xpath(
-                    '//dt/text()|//dt/a/text()').extract()
-                attr = ''.join(temp).replace('\n', '').replace('：', '').replace(
-                    ':', '').replace('\xa0', '').replace(' ', '').replace('【', '').replace('】', '')
-                # value
-                temp = Selector(text=values[i]).xpath(
-                    '//dd/text()|//dd/a/text()').extract()
-                value = ''.join(temp).replace('\n', '')
-                try:
-                    self.db_triples.insert_one({
-                        "_id": entity+'_'+attr+'_'+value,
-                        "item_name": entity,
-                        "attr": attr,
-                        "value": value, }
-                    )
-                except pymongo.errors.DuplicateKeyError:
-                    pass
-                session.write_transaction(self.add_node, entity, attr, value)
+                    temp = Selector(text=attr).xpath(
+                        '//dt//text()').getall()
+                    attr = ''.join(temp).replace('\xa0', '')
+                    # value
+                    values = Selector(text=value).xpath(
+                        '//dd/text()|//dd/a//text()').getall()
+                    for value in values:
+                        try:
+                            value=value.replace('\n','')
+                            logging.warning(entity+'_'+attr+'_'+value)
+                            self.db_triples.insert_one({
+                                "_id": entity+'_'+attr+'_'+value,
+                                "item_name": entity,
+                                "attr": attr,
+                                "value": value, }
+                            )
+                        except pymongo.errors.DuplicateKeyError:
+                            pass
+                        session.write_transaction(self.add_node, entity, attr, value)
+            except Exception:
+                logging.error('\n---'.join(attrs)+'\n_________________'+'\n---'.join(values))
