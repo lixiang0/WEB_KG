@@ -18,7 +18,8 @@
 - 如果是项目问题，请提issue。
 - 如果涉及到不方便公开的，请发邮件。
 - ChatBot请访问[链接](http://bot.rubenxiao.com/)
-- 成型的百科知识图谱访问[链接](http://kg.rubenxiao.com/)，用户名：neo4j,密码：123。
+- 成型的百科知识图谱访问[链接](http://kg.rubenxiao.com/)，用户名：neo4j,密码：123。效果如下：
+![](imgs/kg6.png)
 
 ### 环境
 
