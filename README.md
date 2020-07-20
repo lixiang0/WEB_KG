@@ -5,6 +5,10 @@
 - 构建中文知识图谱
 - 构建百科bot（构建中）
 
+##### update 20200720
+
+Windows上的部署参考[如何在Windows上部署](https://github.com/lixiang0/WEB_KG/issues/20)，感谢LMY-nlp0701！
+
 ##### update 20191121
 
 - 迁移代码到爬虫框架scrapy
